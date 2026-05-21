@@ -56,15 +56,15 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
-            <groupId>se.iths.kattis</groupId>
-            <artifactId>mailservice-grupp5</artifactId>
-            <version>1.0.1</version>
+            <groupId>se.iths.paveena</groupId>
+            <artifactId>spring-messenger</artifactId>
+            <version>1.0.5</version>
         </dependency>
     </dependencies>
     <repositories>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/kattis82/mailservice-grupp5</url>
+            <url>https://maven.pkg.github.com/paveena-naebsuwan/spring-messenger</url>
         </repository>
     </repositories>
 
