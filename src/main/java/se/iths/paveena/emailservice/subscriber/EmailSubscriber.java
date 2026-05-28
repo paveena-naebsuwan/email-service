@@ -8,6 +8,8 @@ import se.iths.paveena.emailservice.dto.ProductInfoResponse;
 import se.iths.paveena.springmessenger.messaging.EmailSender;
 import se.iths.paveena.springmessenger.model.Email;
 
+import java.math.BigDecimal;
+
 @Component
 @RequiredArgsConstructor
 public class EmailSubscriber {
@@ -30,17 +32,32 @@ public class EmailSubscriber {
     private String orderConfirm(OrderResponse order) {
 
         StringBuilder orderBuilder = new StringBuilder();
-        orderBuilder.append("Tack för din beställning! ");
-        orderBuilder.append("Ordernummer: ").append(order.id()).append("\n");
+
+        orderBuilder
+                .append("Tack för din beställning!\nOrdernummer: #")
+                .append(order.id())
+                .append("\n\n");
 
         for (ProductInfoResponse item : order.items()) {
-            orderBuilder.append(item.name());
-            orderBuilder.append(item.quantity());
-            orderBuilder.append(item.price());
+
+            BigDecimal totalPerItem = item.price().multiply(BigDecimal.valueOf(item.quantity()));
+
+            orderBuilder
+                    .append(item.name())
+                    .append(" ")
+                    .append(item.price())
+                    .append(" kr x ")
+                    .append(item.quantity())
+                    .append(" = ")
+                    .append(totalPerItem)
+                    .append(" kr\n");
         }
 
-        orderBuilder.append("\nTotalt: ").append(order.totalPrice()).append(" kr");
-        orderBuilder.append("\n\nHälsningar från Webbhandlaren!");
+        orderBuilder
+                .append("\nTotalt: ")
+                .append(order.totalPrice())
+                .append(" kr\n\nHälsningar från Webbhandlaren!");
+
         return orderBuilder.toString();
     }
 }
