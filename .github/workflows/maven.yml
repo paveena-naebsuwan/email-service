@@ -49,4 +49,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: paveenan/email-service:1.0.0
+          tags: paveenan/email-service:1.0.1
