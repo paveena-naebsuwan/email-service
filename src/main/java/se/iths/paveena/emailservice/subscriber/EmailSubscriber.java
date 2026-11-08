@@ -10,16 +10,32 @@ import se.iths.paveena.springmessenger.model.Email;
 
 import java.math.BigDecimal;
 
+/**
+ * Klassen tar emot beställningar från RabbitMQ och skickar
+ * en orderbekräftelse till kunden via e-post.
+ *
+ * Den hämtar information om beställningen och skapar
+ * ett meddelande med produkter, antal och totalpris.
+ */
 @Component
 @RequiredArgsConstructor
 public class EmailSubscriber {
 
     private final EmailSender emailSender;
 
+    /**
+     * Tar emot en beställning från RabbitMQ.
+     *
+     * Skapar en orderbekräftelse med information om beställningen
+     * och skickar den till kunden via e-post.
+     *
+     * @param order information om beställningen
+     */
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void subscribe(OrderResponse order) {
 
         System.out.println("Order mottagen: " + order.id());
+        System.out.println(orderConfirm(order));
 
         Email email = new Email();
         email.setRecipient(order.customerName());
@@ -29,6 +45,15 @@ public class EmailSubscriber {
         emailSender.send(email);
     }
 
+    /**
+     * Skapar texten till kundens orderbekräftelse.
+     *
+     * Hämtar ordernummer, produktnamn, pris och antal.
+     * Räknar också ut det sammanlagda priset för varje produkt.
+     *
+     * @param order information om beställningen
+     * @return en färdig text med information om beställningen
+     */
     private String orderConfirm(OrderResponse order) {
 
         StringBuilder orderBuilder = new StringBuilder();
